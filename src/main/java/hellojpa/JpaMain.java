@@ -19,18 +19,15 @@ public class JpaMain {
         tx.begin();
 
         try{
-            // my logic
-            List<Member> result = em.createQuery("select m from Member as m", Member.class)
-                    .setFirstResult(1)
-                    .setMaxResults(10)
-                    .getResultList();
+            // 영속
+            Member member1 = em.find(Member.class, 150L); // SELECT 쿼리로 조회 후 1차캐시에 저장
+            member1.setName("AAAAA");
 
-            for (Member member : result) {
-                System.out.println("member.getName() = " + member.getName());
-            }
+            em.clear(); // 1차 캐시 초기화
 
-            // logic end
+            Member member2 = em.find(Member.class, 150L); // 다시 SELECT 쿼리 필요
 
+            System.out.println("==================");
             tx.commit();
         }
         catch (Exception e){
