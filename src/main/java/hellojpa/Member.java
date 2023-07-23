@@ -1,21 +1,25 @@
 package hellojpa;
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity // JPA가 관리할 객체
+@Entity
+@SequenceGenerator(
+        name = "MEMBER_SEQ_GENERATOR",
+        sequenceName = "MEMBER_SEQ",
+        initialValue = 1, allocationSize = 50)
 public class Member {
-
-    @Id // 데이터베이스 PK와 매핑
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
     private Long id;
-    private String name;
+
+    @Column(name = "name", nullable = false) // DB에는 name이라 쓰고,
+    private String username; // 객체에는 username이라 쓸 때
+
 
     public Member(){
 
-    }
-    public Member(Long id, String name) {
-        this.id = id;
-        this.name = name;
     }
 
     public Long getId() {
@@ -26,11 +30,11 @@ public class Member {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

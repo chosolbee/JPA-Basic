@@ -19,15 +19,27 @@ public class JpaMain {
         tx.begin();
 
         try{
-            // 영속
-            Member member1 = em.find(Member.class, 150L); // SELECT 쿼리로 조회 후 1차캐시에 저장
-            member1.setName("AAAAA");
+            Member member1 = new Member();
+            member1.setUsername("A");
 
-            em.clear(); // 1차 캐시 초기화
+            Member member2 = new Member();
+            member2.setUsername("B");
 
-            Member member2 = em.find(Member.class, 150L); // 다시 SELECT 쿼리 필요
+            Member member3 = new Member();
+            member3.setUsername("C");
 
-            System.out.println("==================");
+            System.out.println("=================");
+
+            em.persist(member1); // 1, 51로 맞춘다 -> 두번 call next value
+            em.persist(member2); // Memory에서 호출 (미리 50개씩 가져왔으니까)
+            em.persist(member3); // Memory에서 호출 (미리 50개씩 가져왔으니까)
+
+            System.out.println("member1 = " + member1.getId());
+            System.out.println("member2 = " + member2.getId());
+            System.out.println("member3 = " + member3.getId());
+
+            System.out.println("=================");
+
             tx.commit();
         }
         catch (Exception e){
