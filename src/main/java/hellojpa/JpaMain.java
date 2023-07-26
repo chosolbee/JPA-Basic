@@ -19,26 +19,23 @@ public class JpaMain {
         tx.begin();
 
         try{
-            Member member1 = new Member();
-            member1.setUsername("A");
+            // 팀 저장
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
 
-            Member member2 = new Member();
-            member2.setUsername("B");
+            // 회원 저장
+            Member member = new Member();
+            member.setUsername("member1");
+            em.persist(member);
 
-            Member member3 = new Member();
-            member3.setUsername("C");
+            team.addMember(member);
 
-            System.out.println("=================");
-
-            em.persist(member1); // 1, 51로 맞춘다 -> 두번 call next value
-            em.persist(member2); // Memory에서 호출 (미리 50개씩 가져왔으니까)
-            em.persist(member3); // Memory에서 호출 (미리 50개씩 가져왔으니까)
-
-            System.out.println("member1 = " + member1.getId());
-            System.out.println("member2 = " + member2.getId());
-            System.out.println("member3 = " + member3.getId());
-
-            System.out.println("=================");
+            Team findTeam = em.find(Team.class, team.getId()); // 팀 조회 SELECT query
+            List<Member> members = findTeam.getMembers(); // members 조회 SELECT query
+            for (Member m : members) {
+                System.out.println("m.getUsername() = " + m.getUsername());
+            }
 
             tx.commit();
         }

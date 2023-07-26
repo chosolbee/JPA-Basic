@@ -5,21 +5,28 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@SequenceGenerator(
-        name = "MEMBER_SEQ_GENERATOR",
-        sequenceName = "MEMBER_SEQ",
-        initialValue = 1, allocationSize = 50)
 public class Member {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
+
+    @Id @GeneratedValue
+    @Column(name = "MEMBER_ID")
     private Long id;
 
-    @Column(name = "name", nullable = false) // DB에는 name이라 쓰고,
-    private String username; // 객체에는 username이라 쓸 때
+    @Column(name = "USERNAME")
+    private String username;
 
+//    @Column(name = "TEAM_ID")
+//    private Long teamId;
 
-    public Member(){
+    @ManyToOne // Member 입장에서 ManyToOne이므로 (N:1관계)
+    @JoinColumn(name = "TEAM_ID") // 어떤 컬럼이랑 매핑할것인지
+    private Team team;
 
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public Long getId() {
@@ -37,4 +44,5 @@ public class Member {
     public void setUsername(String username) {
         this.username = username;
     }
+
 }
